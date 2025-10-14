@@ -1,0 +1,8 @@
+Yes, Java allows it. And this method is called "constructor overloading".
+
+Java can create multiple constructors in the same class, as long as each one has a different parameter list (different number, type, or order of parameters).
+For example, both constructors under are valid:
+1.public DigitalVideoDisc(String title) {}
+2.public DigitalVideoDisc(String category, String title) {}
+
+But if both constructors had the exact same parameter type and count, Java would not know which one to call then it would cause an error.
