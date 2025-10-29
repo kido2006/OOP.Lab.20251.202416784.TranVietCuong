@@ -1,0 +1,19 @@
+Question: Try to add a method addDigitalVideoDisc which allows to pass an arbitrary number of arguments for dvd. Compare to an array parameter. What do you prefer in this case?
+Answer:
+To use array DigitalVideoDisc[], there needed to create a new array initialy
+But to use varargs (...), there is no need to create a new array. Instead, it can call directly like addDigitalVideoDisc(dvd1, dvd2, dvd3). This make varargs is much more flexible
+
+Question: Is JAVA a Pass by Value or a Pass by Reference programming language?
+Answer: 
+Java is Pass by Value programming language
+For primitive types (like int, double, boolean), Java copies the actual value.
+For objects, Java copies the reference value (the "address" that points to the object), not the object itself.
+
+Quesstion: After the call of swap(jungleDVD, cinderellaDVD) why does the title of these two objects still remain?
+Answer:
+The references were copied, not shared. Swapping the copies doesn’t swap the originals.
+
+Question: After the call of changeTitle(jungleDVD, cinderellaDVD.getTitle()) why is the title of the JungleDVD changed?
+Answer:
+After the call of changeTitle(jungleDVD, cinderellaDVD.getTitle()), the title of jungleDVD changes because the reference to the same object is copied into the method. It modifies the data inside that object, not the reference itself.
+In short, the reference was copied, but both references point to the same object. Therefore, it is modifying the object through one reference changes it for the other as well.
