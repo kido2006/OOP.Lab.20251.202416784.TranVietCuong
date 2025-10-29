@@ -33,10 +33,11 @@ public class DigitalVideoDisc {
 		this.cost = cost;
 	}
 
-
+	
 	public String getTitle() {
 		return title;
 	}
+	
 	public String getCategory() {
 		return category;
 	}
