@@ -37,6 +37,12 @@ public class Aims {
         
 		System.out.print("Total cost is: ");
 		System.out.println(cart.totalCost());
+		
+        System.out.println("Total number of DVDs: " + DigitalVideoDisc.getNbDigitalVideoDiscs());
+
+        System.out.println("DVD1 ID: " + dvd1.getId());
+        System.out.println("DVD2 ID: " + dvd2.getId());
+        System.out.println("DVD3 ID: " + dvd3.getId());
 	}
 
 }
