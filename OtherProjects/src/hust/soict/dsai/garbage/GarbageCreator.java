@@ -1,19 +1,28 @@
 package hust.soict.dsai.garbage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class GarbageCreator {
-    public static void main(String[] args) {
-        String base = "abc123xyz";
+    public static void main(String[] args) throws IOException {
+        File file = new File("test.exe");
+        
+        long start = System.currentTimeMillis();
+        
+        FileInputStream fis = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        fis.read(bytes);
+        fis.close();
 
-        byte[] inputBytes = base.getBytes();
-
-        long startTime = System.currentTimeMillis();
-
-        String outputString = "";
-        for (byte b : inputBytes) {
-            outputString += (char) b;  
+        String output = "";
+        for (int i = 0; i < bytes.length; i++) {
+            output += (char) bytes[i];
         }
+        
+        long end = System.currentTimeMillis();
+        System.out.println("Done");
+        System.out.println("Processing time: " + (end - start) + " ms");
 
-        long endTime = System.currentTimeMillis();
-        System.out.println("Time: " + (endTime - startTime) + " ms");
     }
 }
