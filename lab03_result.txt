@@ -1,0 +1,3 @@
+Score: 9/10
+Comments:
+- Hàm swap trong TestPassingParameter ko thực sự đổi giá trị
