@@ -1,19 +1,44 @@
-Question: Try to add a method addDigitalVideoDisc which allows to pass an arbitrary number of arguments for dvd. Compare to an array parameter. What do you prefer in this case?
-Answer:
-To use array DigitalVideoDisc[], there needed to create a new array initialy
-But to use varargs (...), there is no need to create a new array. Instead, it can call directly like addDigitalVideoDisc(dvd1, dvd2, dvd3). This make varargs is much more flexible
+1. Which classes are aggregates of other classes? Checking all constructors of whole classes if they initialize for their parts?
 
-Question: Is JAVA a Pass by Value or a Pass by Reference programming language?
-Answer: 
-Java is Pass by Value programming language
-For primitive types (like int, double, boolean), Java copies the actual value.
-For objects, Java copies the reference value (the "address" that points to the object), not the object itself.
+Book aggregates a list of authors (ArrayList<String>).  
+CompactDisc aggregates a list of Track objects (ArrayList<Track>).  
+Cart aggregates a list of Media objects (ArrayList<Media>).  
+Store aggregates a list of Media objects (ArrayList<Media>).  
 
-Quesstion: After the call of swap(jungleDVD, cinderellaDVD) why does the title of these two objects still remain?
-Answer:
-The references were copied, not shared. Swapping the copies doesn’t swap the originals.
+The constructors correctly initialize their parts:
+- Book initializes its authors list.
+- CompactDisc initializes its tracks list.
+- Cart initializes its itemsOrdered list.
+- Store initializes its itemsInStore list.
 
-Question: After the call of changeTitle(jungleDVD, cinderellaDVD.getTitle()) why is the title of the JungleDVD changed?
-Answer:
-After the call of changeTitle(jungleDVD, cinderellaDVD.getTitle()), the title of jungleDVD changes because the reference to the same object is copied into the method. It modifies the data inside that object, not the reference itself.
-In short, the reference was copied, but both references point to the same object. Therefore, it is modifying the object through one reference changes it for the other as well.
+
+2. When overriding the equals() method of the Object class, you will have to cast the Object parameter obj to the type of Object that you are dealing with. For example, in the Media class, you must cast the Object obj to a Media, and then check the equality of the two objects’ attributes as the above requirements (i.e. title for Media; title and length for Track). If the passing object is not an instance of Media, what happens?
+
+The equals() method must return false.  
+If the object is not an instance of the expected class, it cannot be compared meaningfully, so the method should not perform a cast and must return false to avoid errors.
+
+
+3. What class should implement the Comparable interface?
+
+The Media class should implement Comparable<Media>, because Media is the parent type stored in the cart and used for sorting.
+
+
+4. In those classes, how should you implement the compareTo()method be to reflect the ordering that we want?
+
+To follow the default ordering rule, compareTo() should compare titles alphabetically (ascending). If titles are equal, compare costs in decreasing order.  
+
+5. Can we have two ordering rules of the item (by title then cost and by cost then title) if we use this Comparable interface approach?
+
+No.  
+Comparable allows only one compareTo() method, so only one sorting rule can be implemented. Multiple ordering rules require using separate Comparator classes instead.
+
+
+6. Suppose the DVDs has a different ordering rule from the other media types, that is by title, then decreasing length, then cost. How would you modify your code to allow this?
+
+I will create a new Comparator specifically for DigitalVideoDisc.
+
+This custom comparator will:
+1) Compare titles alphabetically.  
+2) If equal, compare DVD lengths in decreasing order.  
+3) If still equal, compare costs.
+
