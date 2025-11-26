@@ -26,6 +26,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="G:\HUST\hust 2025.1\OOP\Githubb\OOP.Lab.20251.202416784.TranVietCuong"/>
 			<item value="G:\HUST\hust 2025.1\OOP\Githubb\OOP.Lab.20251.202416784.TranVietCuong\AimsProject"/>
 		</list>
 		<section name="SmartImportWizard.dialogBounds">
