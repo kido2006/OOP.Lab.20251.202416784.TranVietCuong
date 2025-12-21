@@ -1,20 +1,32 @@
 package hust.soict.dsai.aims.cart;
 
+import hust.soict.dsai.aims.exception.LimitExceededException;
 import hust.soict.dsai.aims.media.Media;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Cart {
 
-    private ArrayList<Media> itemsOrdered = new ArrayList<>();
+    private ObservableList<Media> itemsOrdered = FXCollections.observableArrayList();
+    public ObservableList<Media> getItemsOrdered() {
+		return itemsOrdered;
+	}
+    
+    public static final int MAX_NUMBERS_ORDERED = 20;
 
-    public void addMedia(Media media) {
+    public void addMedia(Media media) throws LimitExceededException {
+        if (itemsOrdered.size() >= MAX_NUMBERS_ORDERED) {
+            throw new LimitExceededException(
+                "ERROR: The number of media has reached its limit"
+            );
+        }
         if (itemsOrdered.contains(media)) {
-            System.out.println("Media already in cart!");
-            return;
+            throw new IllegalArgumentException("This item is already in your cart!");
         }
         itemsOrdered.add(media);
-        System.out.println("Added: " + media.getTitle());
     }
 
     public void removeMedia(Media media) {
@@ -81,7 +93,11 @@ public class Cart {
             return;
         }
         if (m instanceof hust.soict.dsai.aims.media.Playable) {
-            ((hust.soict.dsai.aims.media.Playable) m).play();
+            try {
+                ((hust.soict.dsai.aims.media.Playable) m).play();
+            } catch (hust.soict.dsai.aims.exception.PlayerException e) {
+                System.out.println(e.getMessage());
+            }
         } else {
             System.out.println("This media cannot be played.");
         }

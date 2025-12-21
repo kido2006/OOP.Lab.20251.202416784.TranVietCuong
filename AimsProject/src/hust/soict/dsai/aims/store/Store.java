@@ -7,12 +7,21 @@ import hust.soict.dsai.aims.media.Media;
 public class Store {
 
     private ArrayList<Media> itemsInStore = new ArrayList<>();
-
+    public ArrayList<Media> getItemsInStore() {
+        return itemsInStore;
+    }
     public void addMedia(Media media) {
-        if (media == null) return;
+        for (Media m : itemsInStore) {
+            if (m.getTitle().equalsIgnoreCase(media.getTitle())
+                && m.getCategory().equalsIgnoreCase(media.getCategory())) {
+
+                throw new IllegalArgumentException("Duplicate media");
+            }
+        }
         itemsInStore.add(media);
         System.out.println("Added to store: " + media.getTitle());
     }
+
 
     public void removeMedia(Media media) {
         if (itemsInStore.remove(media)) {
@@ -46,4 +55,5 @@ public class Store {
         }
         return null;
     }
+    
 }

@@ -1,44 +1,27 @@
-1. Which classes are aggregates of other classes? Checking all constructors of whole classes if they initialize for their parts?
+***
+Question:
+Programming with AWT and Swing is quite similar (similar elements including container/components, event-handling). However, there are some differences that you need to note:
+The top-level containers in Swing and AWT
+The class name of components in AWT and corresponding class’s name in Swing
 
-Book aggregates a list of authors (ArrayList<String>).  
-CompactDisc aggregates a list of Track objects (ArrayList<Track>).  
-Cart aggregates a list of Media objects (ArrayList<Media>).  
-Store aggregates a list of Media objects (ArrayList<Media>).  
+Answer:
+Differences in top-level containers:
+- AWT: Uses Frame as the top-level container. Components can be added directly to the Frame.
+- Swing: Uses JFrame as the top-level container. Components must be added to the ContentPane of the JFrame, not directly to the frame itself.
 
-The constructors correctly initialize their parts:
-- Book initializes its authors list.
-- CompactDisc initializes its tracks list.
-- Cart initializes its itemsOrdered list.
-- Store initializes its itemsInStore list.
-
-
-2. When overriding the equals() method of the Object class, you will have to cast the Object parameter obj to the type of Object that you are dealing with. For example, in the Media class, you must cast the Object obj to a Media, and then check the equality of the two objects’ attributes as the above requirements (i.e. title for Media; title and length for Track). If the passing object is not an instance of Media, what happens?
-
-The equals() method must return false.  
-If the object is not an instance of the expected class, it cannot be compared meaningfully, so the method should not perform a cast and must return false to avoid errors.
+Differences in component class names:
+- AWT components: Use simple class names such as Button, Label, TextField, Frame, etc.
+- Swing components: Use corresponding class names with a leading J, for example JButton, JLabel, JTextField, JFrame, and so on.
 
 
-3. What class should implement the Comparable interface?
+***
+Question:
+The Aims class must be updated to handle any exceptions generated when the play() methods are called. What happens when you don't update for them to catch?
 
-The Media class should implement Comparable<Media>, because Media is the parent type stored in the cart and used for sorting.
-
-
-4. In those classes, how should you implement the compareTo()method be to reflect the ordering that we want?
-
-To follow the default ordering rule, compareTo() should compare titles alphabetically (ascending). If titles are equal, compare costs in decreasing order.  
-
-5. Can we have two ordering rules of the item (by title then cost and by cost then title) if we use this Comparable interface approach?
-
-No.  
-Comparable allows only one compareTo() method, so only one sorting rule can be implemented. Multiple ordering rules require using separate Comparator classes instead.
-
-
-6. Suppose the DVDs has a different ordering rule from the other media types, that is by title, then decreasing length, then cost. How would you modify your code to allow this?
-
-I will create a new Comparator specifically for DigitalVideoDisc.
-
-This custom comparator will:
-1) Compare titles alphabetically.  
-2) If equal, compare DVD lengths in decreasing order.  
-3) If still equal, compare costs.
-
+Answer:
+When the Aims class is not updated to handle (catch) the exceptions thrown by the play() methods, the following happens:
+- The exception propagates up the call stack.
+- If it is not caught anywhere, the program terminates at runtime.
+- Java prints a stack trace to the console.
+- The remaining code after the play() call is not executed.
+To prevent this, the Aims class must use try–catch blocks to handle the exception and allow the program to continue running normally.

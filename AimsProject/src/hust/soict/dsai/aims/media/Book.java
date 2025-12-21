@@ -3,6 +3,8 @@ package hust.soict.dsai.aims.media;
 import java.util.ArrayList;
 import java.util.List;
 
+import hust.soict.dsai.aims.exception.AuthorNotFoundException;
+
 public class Book extends Media {
 
     private List<String> authors = new ArrayList<>();
@@ -33,14 +35,17 @@ public class Book extends Media {
         }
     }
 
-    public void removeAuthor(String authorName) {
-        if (authors.contains(authorName)) {
-            authors.remove(authorName);
-            System.out.println("Author " + authorName + " removed!");
-        } else {
-            System.out.println("Author " + authorName + " is not in the list!");
+    public void removeAuthor(String author)
+            throws AuthorNotFoundException {
+
+        if (!authors.contains(author)) {
+            throw new AuthorNotFoundException(
+                "ERROR: Author not found"
+            );
         }
+        authors.remove(author);
     }
+
 
     @Override
     public String toString() {

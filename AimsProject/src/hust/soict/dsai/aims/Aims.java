@@ -1,8 +1,10 @@
 package hust.soict.dsai.aims;
 
 import hust.soict.dsai.aims.cart.Cart;
-import hust.soict.dsai.aims.store.Store;
+import hust.soict.dsai.aims.exception.LimitExceededException;
+import hust.soict.dsai.aims.exception.PlayerException;
 import hust.soict.dsai.aims.media.*;
+import hust.soict.dsai.aims.store.Store;
 
 import java.util.Scanner;
 
@@ -18,11 +20,13 @@ public class Aims {
         app.showMenu();
     }
 
-    //init store
     private void initStore() {
-        store.addMedia(new DigitalVideoDisc("The Lion King", "Animation", "Roger Allers", 87, 19.95f));
-        store.addMedia(new DigitalVideoDisc("Star Wars", "Science Fiction", "George Lucas", 87, 24.95f));
-        store.addMedia(new DigitalVideoDisc("Aladin", "Animation", "John Musker", 90, 18.99f));
+        store.addMedia(new DigitalVideoDisc(
+                "The Lion King", "Animation", "Roger Allers", 87, 19.95f));
+        store.addMedia(new DigitalVideoDisc(
+                "Star Wars", "Science Fiction", "George Lucas", 87, 24.95f));
+        store.addMedia(new DigitalVideoDisc(
+                "Aladin", "Animation", "John Musker", 90, 18.99f));
 
         store.addMedia(new Book("The Valley of Fear", "Detective", 20.0f));
 
@@ -32,7 +36,6 @@ public class Aims {
         store.addMedia(cd);
     }
 
-    //main menu
     public void showMenu() {
         while (true) {
             System.out.println("\nAIMS:");
@@ -43,17 +46,13 @@ public class Aims {
 
             int choice = readInt();
             switch (choice) {
-                case 1:
-                    storeMenu();
-                    break;
-                case 2:
-                    cartMenu();
-                    break;
-                case 0:
+                case 1 -> storeMenu();
+                case 2 -> cartMenu();
+                case 0 -> {
                     System.out.println("Bye!");
                     return;
-                default:
-                    System.out.println("Invalid choice.");
+                }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
@@ -68,7 +67,6 @@ public class Aims {
         return x;
     }
 
-    //store
     public void storeMenu() {
         while (true) {
             store.printStore();
@@ -81,17 +79,11 @@ public class Aims {
 
             int choice = readInt();
             switch (choice) {
-                case 1:
-                    seeMediaDetails();
-                    break;
-                case 2:
-                    addMediaToCartFromStore();
-                    break;
-                case 3:
-                    playMediaFromStore();
-                    break;
-                case 0:
-                    return;
+                case 1 -> seeMediaDetails();
+                case 2 -> addMediaToCartFromStore();
+                case 3 -> playMediaFromStore();
+                case 0 -> { return; }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
@@ -100,14 +92,14 @@ public class Aims {
         System.out.print("Enter title: ");
         String title = scanner.nextLine();
 
-        Media m = store.searchMediaByTitle(title);
-        if (m == null) {
+        Media media = store.searchMediaByTitle(title);
+        if (media == null) {
             System.out.println("Media not found.");
             return;
         }
 
-        System.out.println("\nDetails: " + m.toString());
-        mediaDetailsMenu(m);
+        System.out.println("\nDetails: " + media);
+        mediaDetailsMenu(media);
     }
 
     public void mediaDetailsMenu(Media media) {
@@ -119,18 +111,28 @@ public class Aims {
 
             int choice = readInt();
             switch (choice) {
-                case 1:
-                    cart.addMedia(media);
-                    break;
-                case 2:
+                case 1 -> {
+                    try {
+                        cart.addMedia(media);
+                    } catch (LimitExceededException e) {
+                        System.err.println(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+                case 2 -> {
                     if (media instanceof Playable) {
-                        ((Playable) media).play();
+                        try {
+                            ((Playable) media).play();
+                        } catch (PlayerException e) {
+                            System.err.println(e.getMessage());
+                            e.printStackTrace();
+                        }
                     } else {
                         System.out.println("This media cannot be played.");
                     }
-                    break;
-                case 0:
-                    return;
+                }
+                case 0 -> { return; }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }
@@ -138,22 +140,37 @@ public class Aims {
     private void addMediaToCartFromStore() {
         System.out.print("Enter title: ");
         String title = scanner.nextLine();
-        Media m = store.searchMediaByTitle(title);
 
-        if (m != null) cart.addMedia(m);
-        else System.out.println("Not found.");
+        Media media = store.searchMediaByTitle(title);
+        if (media != null) {
+            try {
+                cart.addMedia(media);
+            } catch (LimitExceededException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Media not found.");
+        }
     }
 
     private void playMediaFromStore() {
         System.out.print("Enter title: ");
         String title = scanner.nextLine();
-        Media m = store.searchMediaByTitle(title);
 
-        if (m instanceof Playable) ((Playable) m).play();
-        else System.out.println("Not playable or not found.");
+        Media media = store.searchMediaByTitle(title);
+        if (media instanceof Playable) {
+            try {
+                ((Playable) media).play();
+            } catch (PlayerException e) {
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Not playable or not found.");
+        }
     }
 
-    //cart menu
     public void cartMenu() {
         while (true) {
             cart.printCart();
@@ -168,23 +185,13 @@ public class Aims {
 
             int choice = readInt();
             switch (choice) {
-                case 1:
-                    filterCart();
-                    break;
-                case 2:
-                    sortCart();
-                    break;
-                case 3:
-                    removeFromCart();
-                    break;
-                case 4:
-                    playMediaFromCart();
-                    break;
-                case 5:
-                    placeOrder();
-                    break;
-                case 0:
-                    return;
+                case 1 -> filterCart();
+                case 2 -> sortCart();
+                case 3 -> removeFromCart();
+                case 4 -> playMediaFromCart();
+                case 5 -> placeOrder();
+                case 0 -> { return; }
+                default -> System.out.println("Invalid choice.");
             }
         }
     }

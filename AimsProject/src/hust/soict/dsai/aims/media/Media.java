@@ -4,14 +4,13 @@ import java.util.Comparator;
 
 public abstract class Media {
 
-	private static int currentId = 0;
+    private static int currentId = 0;
 
     protected int id;
     protected String title;
     protected String category;
     protected float cost;
 
-    // Constructor
     public Media() {
         currentId++;
         this.id = currentId;
@@ -28,11 +27,15 @@ public abstract class Media {
     }
 
     public Media(String title, String category, float cost) {
-        this(title, category);
+    	this();
+        if (cost < 0) {
+            throw new IllegalArgumentException("Cost must be non-negative");
+        }
+        this.title = title;
+        this.category = category;
         this.cost = cost;
     }
 
-    //Get & Set
     public int getId() {
         return id;
     }
@@ -41,27 +44,14 @@ public abstract class Media {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getCategory() {
         return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public float getCost() {
         return cost;
     }
 
-    public void setCost(float cost) {
-        this.cost = cost;
-    }
-
-    // equals()
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -70,11 +60,13 @@ public abstract class Media {
 
         Media other = (Media) obj;
 
-        return this.title != null && this.title.equals(other.getTitle());
+        if (this.title == null || other.title == null) return false;
+        return this.title.equals(other.title);
     }
-    
-    public static final Comparator<Media> COMPARE_BY_TITLE_COST = new MediaComparatorByTitleCost();
-    public static final Comparator<Media> COMPARE_BY_COST_TITLE = new MediaComparatorByCostTitle();
 
-    
+    public static final Comparator<Media> COMPARE_BY_TITLE_COST =
+            new MediaComparatorByTitleCost();
+
+    public static final Comparator<Media> COMPARE_BY_COST_TITLE =
+            new MediaComparatorByCostTitle();
 }
